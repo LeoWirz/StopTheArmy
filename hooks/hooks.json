@@ -1,12 +1,12 @@
 {
-  "description": "Inject INSTRUCTIONS.md at session start (Claude Code, Codex, Gemini CLI). Line 1 runs in sh/bash, line 2 in PowerShell; see README.",
+  "description": "Inject INSTRUCTIONS.md at session start (Claude Code, Codex, Gemini CLI). Line 1 runs in sh/bash, line 2 in PowerShell on Windows; see README.",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "exec cat \"${CLAUDE_PLUGIN_ROOT:-${extensionPath}}/hooks/session-start.generated.json\"\n$r = $env:CLAUDE_PLUGIN_ROOT; if (-not $r) { $r = '${extensionPath}' }; Get-Content -Raw -LiteralPath (Join-Path $r 'hooks/session-start.generated.json')",
+            "command": "exec cat \"${CLAUDE_PLUGIN_ROOT}${extensionPath}/hooks/session-start.generated.json\"\nGet-Content -Raw -LiteralPath \"${env:CLAUDE_PLUGIN_ROOT}${extensionPath}/hooks/session-start.generated.json\"",
             "commandWindows": "Get-Content -Raw -LiteralPath (Join-Path $env:PLUGIN_ROOT 'hooks/session-start.generated.json')"
           }
         ]

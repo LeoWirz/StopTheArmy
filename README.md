@@ -76,13 +76,17 @@ in Git Bash if it's installed and PowerShell if not, and Gemini uses
 PowerShell on Windows, so one string must work in both shells:
 
 ```
-exec cat "${CLAUDE_PLUGIN_ROOT:-${extensionPath}}/hooks/session-start.generated.json"
-$r = $env:CLAUDE_PLUGIN_ROOT; if (-not $r) { $r = '${extensionPath}' }; Get-Content -Raw ...
+exec cat "${CLAUDE_PLUGIN_ROOT}${extensionPath}/hooks/session-start.generated.json"
+Get-Content -Raw -LiteralPath "${env:CLAUDE_PLUGIN_ROOT}${extensionPath}/hooks/session-start.generated.json"
 ```
 
 - **sh/bash** runs line 1. `exec` replaces the shell, so line 2 is never read.
-- **PowerShell** doesn't know `exec`, so line 1 errors harmlessly (stderr only) and line 2 runs.
-- `${extensionPath}` is filled in by Gemini, which doesn't set `CLAUDE_PLUGIN_ROOT`.
+- **PowerShell on Windows** has no `exec`, so line 1 errors harmlessly (stderr
+  only) and line 2 runs. PowerShell parses *both* lines first, so line 1 must
+  also be valid PowerShell. `test_hooks.py` checks that on every OS.
+- Only one of the two variables is ever set. Claude Code and Codex set
+  `CLAUDE_PLUGIN_ROOT`, and Gemini replaces `${extensionPath}` with its path.
+  Concatenating them gives the plugin folder in every tool.
 
 Hooks are inline commands, not `.ps1` files, so Windows' script execution
 policy doesn't block them.

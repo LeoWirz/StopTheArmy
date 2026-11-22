@@ -83,15 +83,31 @@ def main():
             ]
             if not WINDOWS:  # Gemini uses bash on Unix, PowerShell on Windows
                 cases.append((f"Gemini [{name}]", argv, gemini_cmd, {}, standard))
+        # PowerShell parses the WHOLE shared command before running any of it, so
+        # line 1 (the sh part) must be valid PowerShell syntax too. Parse-check
+        # it on every OS, including after Gemini substitutes a Windows path.
+        win_ext = r"C:\Users\Jane Doe\.gemini\extensions\stop-the-army"
+        parse_only = ("$e = $null; [void][System.Management.Automation.Language.Parser]::ParseInput("
+                      "$env:HOOK_CMD, [ref]$null, [ref]$e); "
+                      "if ($e) { $e | ForEach-Object { $_.Message }; exit 1 }; '{}'")
         for name, argv in ps:
+            for label, cmd in (("shared command", shared["command"]),
+                               ("shared command, Gemini Windows path", shared["command"].replace("${extensionPath}", win_ext))):
+                cases.append((f"parses in PowerShell: {label} [{name}]", argv, parse_only, {"HOOK_CMD": cmd}, {}))
             cases += [
-                (f"Claude Code [{name}]", argv, shared["command"], {"CLAUDE_PLUGIN_ROOT": r}, standard),
                 (f"Codex commandWindows [{name}]", argv, shared["commandWindows"],
                  {"PLUGIN_ROOT": r, "CLAUDE_PLUGIN_ROOT": r}, standard),
                 (f"Copilot [{name}]", argv, cop["powershell"], {"PLUGIN_ROOT": r, "CLAUDE_PLUGIN_ROOT": r}, copilot),
-                # Gemini appends this exit-code check to every Windows hook command
-                (f"Gemini [{name}]", argv, gemini_cmd + "; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }", {}, standard),
             ]
+            # Only Windows runs the shared command in PowerShell (Claude Code without
+            # Git Bash; Gemini). Elsewhere they use sh/bash, and PowerShell 7 on
+            # Linux/macOS even has an `exec` alias, which would change line 1.
+            if WINDOWS:
+                cases += [
+                    (f"Claude Code [{name}]", argv, shared["command"], {"CLAUDE_PLUGIN_ROOT": r}, standard),
+                    # Gemini appends this exit-code check to every Windows hook command
+                    (f"Gemini [{name}]", argv, gemini_cmd + "; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }", {}, standard),
+                ]
 
         for label, argv, command, env_vars, expected in cases:
             proc = run(argv, command, env_vars)
