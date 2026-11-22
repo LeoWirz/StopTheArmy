@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "cat \"$PLUGIN_ROOT/com.github.copilot/hooks/session-start.generated.json\"",
+        "powershell": "Get-Content -Raw -LiteralPath (Join-Path $env:PLUGIN_ROOT 'com.github.copilot/hooks/session-start.generated.json')",
+        "timeoutSec": 30
+      }
+    ]
+  }
+}

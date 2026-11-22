@@ -1,0 +1,22 @@
+{
+  "//": [
+    "##################################################################",
+    "#  GENERATED FILE - DO NOT EDIT HERE. Your changes will be lost. #",
+    "#  Edit instead: plugin.json (repo root)                         #",
+    "#  CI regenerates this file automatically on every push.         #",
+    "#  (Or run locally: python3 scripts/sync.py)                     #",
+    "##################################################################"
+  ],
+  "name": "stop-the-army",
+  "version": "0.1.0",
+  "description": "Personal skills and always-on instructions for any AI coding agent.",
+  "author": {
+    "name": "Your Name"
+  },
+  "license": "MIT",
+  "keywords": [
+    "agent-plugin",
+    "skills",
+    "instructions"
+  ]
+}
