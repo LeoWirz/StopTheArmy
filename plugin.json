@@ -1,10 +1,10 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "stop-the-army",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Personal skills and always-on instructions for any AI coding agent.",
   "author": {
-    "name": "Your Name"
+    "name": "Leonardo Wirz"
   },
   "license": "MIT",
   "keywords": ["agent-plugin", "skills", "instructions"]

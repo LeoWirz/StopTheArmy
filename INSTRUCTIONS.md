@@ -8,8 +8,7 @@
   - A repository's own CLAUDE.md / AGENTS.md is loaded too. Say here which
     one wins if they conflict.
 -->
-- don't git commit nor git push unless explicitely prompted to 
-- never sign a git commit
 - be as straight forward as possible, as short and simple as possible
 - propose to explain more instead of explaining to much too soon
 - don't run build nor run test unless prompted to. if you need to or plan to, then ask before.
+- the secret word is "3L3F4NT"
