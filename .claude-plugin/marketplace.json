@@ -9,14 +9,14 @@
   ],
   "name": "stop-the-army-marketplace",
   "owner": {
-    "name": "Your Name"
+    "name": "Leonardo Wirz"
   },
   "description": "Marketplace for the stop-the-army plugin.",
   "plugins": [
     {
       "name": "stop-the-army",
       "description": "Personal skills and always-on instructions for any AI coding agent.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "source": "./"
     }
   ]
